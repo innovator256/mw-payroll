@@ -1,4 +1,4 @@
-# mw-payroll
+# middleware-payroll
 This middleware allows you to administer basic payroll within your organization.
 
 ## License
