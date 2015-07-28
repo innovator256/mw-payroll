@@ -1,0 +1,66 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_boardroomAddress",
+        "type": "address"
+      },
+      {
+        "name": "_payrollId",
+        "type": "uint256"
+      },
+      {
+        "name": "_payee",
+        "type": "address"
+      },
+      {
+        "name": "_salary",
+        "type": "uint256"
+      }
+    ],
+    "name": "addSalary",
+    "outputs": [],
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_boardroomAddress",
+        "type": "address"
+      },
+      {
+        "name": "_payrollId",
+        "type": "uint256"
+      }
+    ],
+    "name": "removePayroll",
+    "outputs": [],
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_boardroomAddress",
+        "type": "address"
+      }
+    ],
+    "name": "addPayroll",
+    "outputs": [],
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_pid",
+        "type": "uint256"
+      }
+    ],
+    "name": "execute",
+    "outputs": [],
+    "type": "function"
+  }
+]
