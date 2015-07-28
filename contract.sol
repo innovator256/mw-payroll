@@ -34,6 +34,8 @@ contract String{
     function charAt(bytes32 b,uint256 char) returns (bytes1 ){}
 }
 
+/// @title Payroll Middleware
+/// @author Nick Dodson
 contract Payroll {
     struct SalaryInstance {
         address addr;
@@ -53,6 +55,11 @@ contract Payroll {
     mapping(address => mapping(address => uint)) numPayrolls;
     mapping(address => mapping(address => mapping(uint => PayrollInstance))) payrolls;
     
+    /// @notice Add a PayRoll instance from your member address to a BoardRoom address.
+    /// The payroll instance allows you to add salaries to the payroll.
+    /// @dev The add payroll method will create a stored instance of a payroll in which
+    /// a board member can add salaries with the addSalary method.
+    /// @param _boardroomAddress The address of the BoardRoom
     function addPayroll(address _boardroomAddress) {
         uint _numPayrolls = numPayrolls[msg.sender][_boardroomAddress];
         PayrollInstance p = payrolls[msg.sender][_boardroomAddress][_numPayrolls];
@@ -65,6 +72,12 @@ contract Payroll {
         p.instanceExpiry = now + (180 days);
     }
     
+    /// @notice This method will remove a payroll instance
+    /// @dev This method will remove a boardroom instance at a specific payroll id from contract storage.
+    /// Only the member who proposed the payroll isntance can remove it and only after the instance has
+    /// expired.
+    /// @param _boardroomAddress The address of the BoardRoom
+    /// @param _payrollId The ID of the payroll instance
     function removePayroll(address _boardroomAddress, uint _payrollId) {
         PayrollInstance p = payrolls[msg.sender][_boardroomAddress][_payrollId];
         
@@ -75,6 +88,13 @@ contract Payroll {
         delete payrolls[msg.sender][_boardroomAddress][_payrollId];
     }
     
+    /// @notice This method will add a salary to a payroll. Here a board member can specify an address and salary
+    /// to be payed out that address.
+    /// @dev This will add a salary instance to a payroll instance.
+    /// @param _boardroomAddress The address of the BoardRoom
+    /// @param _payrollId The ID of the payroll instance
+    /// @param _payee The salary receiver
+    /// @param _salary The salary in Wei units
     function addSalary(address _boardroomAddress, uint _payrollId, address _payee, uint _salary) {
         PayrollInstance p = payrolls[msg.sender][_boardroomAddress][_payrollId];
         
@@ -110,81 +130,4 @@ contract Payroll {
         
         p.payed = now;
     }
-}             
-
-
-/*
-contract Payroll{function addSalary(address _boardroomAddress,uint256 _payrollId,address _payee,uint256 _salary){}function removePayroll(address _boardroomAddress,uint256 _payrollId){}function addPayroll(address _boardroomAddress){}function execute(uint256 _pid){}}
-
-
-600280547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055610635806100366000396000f3007c0100000000000000000000000000000000000000000000000000000000600035046316edf5c3811461004f57806341b26b261461017757806389baa7731461025d578063fe0d94c11461033157005b73ffffffffffffffffffffffffffffffffffffffff33811660009081526001602081815260408084206004359586168552825280842060243580865292528320918201546103bf949391926044359260643592819082908314806100b857506002840154600014155b806100da57506003840154600090815260068501602052604081206001015414155b806100e55750846000145b61062b575b50506003820180546000908152600684016020908152604080832080547fffffffffffffffffffffffff000000000000000000000000000000000000000016891781556001808201899055855473ffffffffffffffffffffffffffffffffffffffff8b168652600589019094529184208390559101909255600484018054860190555b5050505050505050565b73ffffffffffffffffffffffffffffffffffffffff33811660009081526001602081815260408084206004359586168552825280842060243580865292528320918201546103c59493919291908114806101d657506002820154600014155b806101e2575081544290105b610630575b73ffffffffffffffffffffffffffffffffffffffff3381166000818152602081815260408083209489168084529482528083208390559282526001808252838320948352938152828220878352905290812081815591820181905560028201819055600382018190556004909101555b50505050565b73ffffffffffffffffffffffffffffffffffffffff3381166000818152602081815260408083206004359586168085529083528184205494845260018084528285209185529083528184208585529092528220908101546103cb94939290811415806102ce57506002820154600014155b806102de57506003820154600014155b6103d7575b42600180840182905573ffffffffffffffffffffffffffffffffffffffff338116600090815260208181526040808320938a168352929052208054909101905562ed4e000182555b50505050565b7f5ca9a4d500000000000000000000000000000000000000000000000000000000600090815260048035908190527f66726f6d000000000000000000000000000000000000000000000000000000006024526103d191339080818283848573ffffffffffffffffffffffffffffffffffffffff8816635ca9a4d560208960448b8c866161da5a03f16103ee57005b60006000f35b60006000f35b60006000f35b60006000f35b61032b565b4260028401555b505050505050505050565b5050600080517f0c4f284200000000000000000000000000000000000000000000000000000000825260048b90527f76616c7565000000000000000000000000000000000000000000000000000000602452975073ffffffffffffffffffffffffffffffffffffffff891690630c4f28429060209060448182866161da5a03f161047457005b5050600080516002547fa052b596000000000000000000000000000000000000000000000000000000008352600482905290975073ffffffffffffffffffffffffffffffffffffffff169063a052b5969060209060248182866161da5a03f16104d957005b505060005194508773ffffffffffffffffffffffffffffffffffffffff16639029444a60206000827c01000000000000000000000000000000000000000000000000000000000260005260048b815260200160006000866161da5a03f161053c57005b50506000805173ffffffffffffffffffffffffffffffffffffffff8082168352600160208181526040808620938e1686529281528285208a8652905290832090810154919650945090925042901180610599575060018301546000145b806105a8575060038301546000145b806105b857506002830154600014155b806105c65750600483015434105b61061b575b5060005b60038301548110156103dc5760008181526006840160205260408120805460019091015473ffffffffffffffffffffffffffffffffffffffff909116919081828384848787f161062057005b6103e3565b5050506001016105cf565b61016d565b61025756
-
-[
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_boardroomAddress",
-        "type": "address"
-      },
-      {
-        "name": "_payrollId",
-        "type": "uint256"
-      },
-      {
-        "name": "_payee",
-        "type": "address"
-      },
-      {
-        "name": "_salary",
-        "type": "uint256"
-      }
-    ],
-    "name": "addSalary",
-    "outputs": [],
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_boardroomAddress",
-        "type": "address"
-      },
-      {
-        "name": "_payrollId",
-        "type": "uint256"
-      }
-    ],
-    "name": "removePayroll",
-    "outputs": [],
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_boardroomAddress",
-        "type": "address"
-      }
-    ],
-    "name": "addPayroll",
-    "outputs": [],
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_pid",
-        "type": "uint256"
-      }
-    ],
-    "name": "execute",
-    "outputs": [],
-    "type": "function"
-  }
-]
-
-
-*/
+}
